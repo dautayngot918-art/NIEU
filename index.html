@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="vi" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trợ lý AI Giáo dục Sức khỏe - Khoa Ngoại Tiết Niệu</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        medical: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 h-full flex flex-col antialiased">
+
+    <!-- Header / Navbar -->
+    <header class="bg-gradient-to-r from-medical-800 via-medical-700 to-medical-600 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white/10 p-2.5 rounded-xl backdrop-blur-sm border border-white/20">
+                    <i class="fa-solid fa-stethoscope text-2xl text-cyan-200"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-bold tracking-tight">AI GDSK Ngoại Tiết Niệu</h1>
+                    <p class="text-xs text-cyan-100 font-medium">Trợ lý AI tạo Tờ rơi & Kịch bản Video cho Điều dưỡng</p>
+                </div>
+            </div>
+            <!-- Cảnh báo bảo mật nhanh -->
+            <div class="bg-amber-500/20 border border-amber-300/40 px-3 py-1.5 rounded-lg flex items-center space-x-2 text-xs text-amber-100">
+                <i class="fa-solid fa-shield-halved text-amber-300 animate-pulse"></i>
+                <span><strong>Bảo mật:</strong> Tuyệt đối không nhập tên/SĐT/PID thật lên AI!</span>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="bg-medical-900/40 border-t border-medical-600/30 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto flex space-x-2 sm:space-x-4 overflow-x-auto py-2">
+                <button onclick="switchTab('tab-brochure')" id="btn-tab-brochure" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center space-x-2 whitespace-nowrap bg-white text-medical-800 shadow-md">
+                    <i class="fa-solid fa-file-lines text-medical-600"></i>
+                    <span>1. Tạo Tờ rơi / Brochure</span>
+                </button>
+                <button onclick="switchTab('tab-video')" id="btn-tab-video" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center space-x-2 whitespace-nowrap text-cyan-100 hover:bg-white/10">
+                    <i class="fa-solid fa-video text-cyan-300"></i>
+                    <span>2. Tạo Kịch bản Video 60s</span>
+                </button>
+                <button onclick="switchTab('tab-training')" id="btn-tab-training" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center space-x-2 whitespace-nowrap text-cyan-100 hover:bg-white/10">
+                    <i class="fa-solid fa-graduation-cap text-cyan-300"></i>
+                    <span>3. Hướng dẫn & Bảo mật (90p)</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Body Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- ================= TAB 1: TỜ RƠI / BROCHURE ================= -->
+        <div id="tab-brochure" class="tab-content active space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6">
+                <div class="border-b border-slate-100 pb-4 mb-5">
+                    <h2 class="text-lg font-bold text-slate-900 flex items-center space-x-2">
+                        <span class="w-8 h-8 rounded-lg bg-medical-50 text-medical-600 flex items-center justify-center text-sm font-bold">1</span>
+                        <span>Tạo Prompt Tờ rơi / Brochure Cá nhân hóa (Chỉ 30 giây)</span>
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">Chọn bệnh lý và điền thông số ẩn danh để AI viết nội dung ngôn ngữ bình dân, dễ hiểu cho người lớn tuổi.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Form Controls (Left) -->
+                    <div class="lg:col-span-6 space-y-4">
+                        <!-- Chọn nhóm bệnh lý -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">Chọn Nhóm bệnh lý Ngoại Tiết Niệu</label>
+                            <select id="b-disease" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-medical-500 focus:bg-white transition-all">
+                                <option value="Sỏi thận / sỏi niệu quản (sau nội soi tán sỏi)">Sỏi thận / sỏi niệu quản (sau nội soi tán sỏi)</option>
+                                <option value="U xơ tiền liệt tuyến (bướu lành tuyến tiền liệt sau mổ)">U xơ tiền liệt tuyến (bướu lành tuyến tiền liệt sau mổ)</option>
+                                <option value="Mang ống thông JJ niệu quản tại nhà">Mang ống thông JJ niệu quản tại nhà</option>
+                                <option value="Mang ống dẫn lưu thận qua da tại nhà (PCN)">Mang ống dẫn lưu thận qua da tại nhà (PCN)</option>
+                                <option value="Chăm sóc vết thương mổ mở tiết niệu tại nhà">Chăm sóc vết thương mổ mở tiết niệu tại nhà</option>
+                                <option value="Mang thông tiểu qua niệu đạo (Foley catheter) tại nhà">Mang thông tiểu qua niệu đạo (Foley catheter) tại nhà</option>
+                            </select>
+                        </div>
+
+                        <!-- Thông tin cấu hình ẩn danh -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">Độ tuổi bệnh nhân</label>
+                                <input type="text" id="b-age" value="65 tuổi" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-medical-500 focus:bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">Giới tính</label>
+                                <select id="b-gender" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-medical-500 focus:bg-white">
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Tình trạng cụ thể & lo lắng -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">Tình trạng cụ thể & Lo lắng của bệnh nhân</label>
+                            <textarea id="b-detail" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-medical-500 focus:bg-white" placeholder="Ví dụ: Bệnh nhân lo lắng tiểu ra máu nhẹ, sợ vận động mạnh sợ tuột ống..."></textarea>
+                            <p class="text-[11px] text-rose-600 mt-1 font-medium"><i class="fa-solid fa-circle-exclamation mr-1"></i> Lưu ý bảo mật: Không ghi tên thật, số phòng hay mã số bệnh án!</p>
+                        </div>
+
+                        <!-- Chọn định dạng đầu ra -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">Định dạng tờ rơi</label>
+                            <select id="b-format" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-medical-500 focus:bg-white">
+                                <option value="Tờ rơi 4 điểm chính ngắn gọn (Dặn dò cốt lõi)">Tờ rơi 4 điểm chính ngắn gọn (Dặn dò cốt lõi)</option>
+                                <option value="Bảng checklist Việc nên làm & Không nên làm tại nhà">Bảng checklist Việc nên làm & Không nên làm tại nhà</option>
+                                <option value="Hướng dẫn từng bước chăm sóc chi tiết cho người lớn tuổi">Hướng dẫn từng bước chăm sóc chi tiết cho người lớn tuổi</option>
+                            </select>
+                        </div>
+
+                        <!-- Nút hành động -->
+                        <button onclick="generateBrochurePrompt()" class="w-full bg-gradient-to-r from-medical-600 to-medical-700 text-white font-semibold py-3 px-4 rounded-xl shadow-md hover:from-medical-700 hover:to-medical-800 transition-all flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-wand-magic-sparkles text-cyan-200"></i>
+                            <span>Tạo Prompt Chuẩn Cho AI (ChatGPT / Gemini)</span>
+                        </button>
+                    </div>
+
+                    <!-- Output & Result Area (Right) -->
+                    <div class="lg:col-span-6 flex flex-col space-y-4">
+                        <!-- Khung hiển thị Câu lệnh (Prompt) -->
+                        <div class="bg-slate-900 rounded-xl p-4 text-slate-100 flex flex-col flex-grow border border-slate-800 shadow-inner">
+                            <div class="flex justify-between items-center mb-2 pb-2 border-b border-slate-800">
+                                <span class="text-xs font-mono uppercase tracking-wider text-cyan-400 font-bold flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-terminal"></i>
+                                    <span>Prompt đã tạo tự động (Copy dán vào AI):</span>
+                                </span>
+                                <button onclick="copyToClipboard('b-prompt-output', this)" class="text-xs bg-slate-800 hover:bg-slate-700 text-cyan-300 px-2.5 py-1 rounded-lg border border-slate-700 transition flex items-center space-x-1">
+                                    <i class="fa-regular fa-copy"></i>
+                                    <span>Copy Prompt</span>
+                                </button>
+                            </div>
+                            <div id="b-prompt-output" class="font-mono text-xs text-slate-300 whitespace-pre-wrap leading-relaxed overflow-y-auto max-h-56 p-2 bg-slate-950/60 rounded-lg border border-slate-800/80">
+                                Hãy bấm nút "Tạo Prompt Chuẩn Cho AI" bên trái để hiển thị câu lệnh mẫu...
+                            </div>
+                        </div>
+
+                        <!-- Khung mẫu nội dung tờ rơi giả định (Preview card) -->
+                        <div class="bg-medical-50/50 rounded-xl p-4 border border-medical-100 flex flex-col flex-grow">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-bold uppercase tracking-wider text-medical-800 flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-eye text-medical-600"></i>
+                                    <span>Xem trước kết quả mẫu tờ rơi:</span>
+                                </span>
+                                <button onclick="copyToClipboard('b-result-output', this)" class="text-xs bg-white hover:bg-medical-100 text-medical-700 px-2.5 py-1 rounded-lg border border-medical-200 transition flex items-center space-x-1 shadow-sm">
+                                    <i class="fa-regular fa-copy"></i>
+                                    <span>Copy Nội Dung</span>
+                                </button>
+                            </div>
+                            <div id="b-result-output" class="text-xs text-slate-700 whitespace-pre-wrap leading-relaxed overflow-y-auto max-h-60 p-3 bg-white rounded-lg border border-medical-100 shadow-xs">
+                                [Nội dung tờ rơi do AI soạn thảo sẽ xuất hiện ở đây sau khi bạn đưa câu lệnh vào ChatGPT/Gemini...]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 2: KỊCH BẢN VIDEO 60S ================= -->
+        <div id="tab-video" class="tab-content space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6">
+                <div class="border-b border-slate-100 pb-4 mb-5">
+                    <h2 class="text-lg font-bold text-slate-900 flex items-center space-x-2">
+                        <span class="w-8 h-8 rounded-lg bg-medical-50 text-medical-600 flex items-center justify-center text-sm font-bold">2</span>
+                        <span>Tạo Kịch bản Video ngắn 60 giây / Voice-over tư vấn qua Zalo</span>
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">Giúp điều dưỡng quay video nhanh bằng điện thoại hoặc ghi âm giọng đọc gửi người nhà trước khi xuất viện.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Form Controls (Left) -->
+                    <div class="lg:col-span-6 space-y-4">
+                        <!-- Chủ đề hướng dẫn -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">Chủ đề video hướng dẫn</label>
+                            <select id="v-topic" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-medical-500 focus:bg-white">
+                                <option value="Dặn dò trước khi xuất viện mang ống thông JJ">Dặn dò trước khi xuất viện mang ống thông JJ</option>
+                                <option value="Hướng dẫn uống nước & chế độ ăn chống sỏi tái phát">Hướng dẫn uống nước & chế độ ăn chống sỏi tái phát</option>
+                                <option value="Xử trí tại nhà khi có tiểu máu nhẹ hoặc đau lưng nhẹ">Xử trí tại nhà khi có tiểu máu nhẹ hoặc đau lưng nhẹ</option>
+                                <option value="Cách tự thay băng vết thương sạch tại nhà đúng cách">Cách tự thay băng vết thương sạch tại nhà đúng cách</option>
+                            </select>
+                        </div>
+
+                        <!-- Phong cách diễn đạt -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">Phong cách diễn đạt</label>
+                            <select id="v-style" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-medical-500 focus:bg-white">
+                                <option value="Ân cần, ấm áp, truyền cảm hứng cho người lớn tuổi">Ân cần, ấm áp, truyền cảm hứng cho người lớn tuổi</option>
+                                <option value="Chuyên nghiệp, rõ ràng, rành mạch từng bước y khoa">Chuyên nghiệp, rõ ràng, rành mạch từng bước y khoa</option>
+                                <option value="Gần gũi, dễ thương, giống như người nhà hướng dẫn">Gần gũi, dễ thương, giống như người nhà hướng dẫn</option>
+                            </select>
+                        </div>
+
+                        <!-- Đối tượng xem -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">Người xem chính (Đối tượng tiếp nhận)</label>
+                            <input type="text" id="v-audience" value="Người bệnh lớn tuổi và con cái chăm sóc" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-medical-500 focus:bg-white">
+                        </div>
+
+                        <!-- Lưu ý thêm -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">Ghi chú / Nhấn mạnh đặc biệt</label>
+                            <input type="text" id="v-note" value="Nhấn mạnh uống đủ 2-2.5 lít nước mỗi ngày và không được kéo ống." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-medical-500 focus:bg-white">
+                        </div>
+
+                        <!-- Nút hành động -->
+                        <button onclick="generateVideoPrompt()" class="w-full bg-gradient-to-r from-cyan-600 to-medical-600 text-white font-semibold py-3 px-4 rounded-xl shadow-md hover:from-cyan-700 hover:to-medical-700 transition-all flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-clapperboard text-amber-200"></i>
+                            <span>Tạo Prompt Kịch Bản Video 60 Giây</span>
+                        </button>
+                    </div>
+
+                    <!-- Output Area (Right) -->
+                    <div class="lg:col-span-6 flex flex-col space-y-4">
+                        <!-- Khung Prompt Video -->
+                        <div class="bg-slate-900 rounded-xl p-4 text-slate-100 flex flex-col flex-grow border border-slate-800 shadow-inner">
+                            <div class="flex justify-between items-center mb-2 pb-2 border-b border-slate-800">
+                                <span class="text-xs font-mono uppercase tracking-wider text-cyan-400 font-bold flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-terminal"></i>
+                                    <span>Prompt Kịch bản video (Copy dán vào AI):</span>
+                                </span>
+                                <button onclick="copyToClipboard('v-prompt-output', this)" class="text-xs bg-slate-800 hover:bg-slate-700 text-cyan-300 px-2.5 py-1 rounded-lg border border-slate-700 transition flex items-center space-x-1">
+                                    <i class="fa-regular fa-copy"></i>
+                                    <span>Copy Prompt</span>
+                                </button>
+                            </div>
+                            <div id="v-prompt-output" class="font-mono text-xs text-slate-300 whitespace-pre-wrap leading-relaxed overflow-y-auto max-h-56 p-2 bg-slate-950/60 rounded-lg border border-slate-800/80">
+                                Hãy bấm nút "Tạo Prompt Kịch Bản Video 60 Giây" bên trái để hiển thị câu lệnh...
+                            </div>
+                        </div>
+
+                        <!-- Khung mẫu kịch bản phân đoạn -->
+                        <div class="bg-cyan-50/50 rounded-xl p-4 border border-cyan-100 flex flex-col flex-grow">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-bold uppercase tracking-wider text-cyan-900 flex items-center space-x-1.5">
+                                    <i class="fa-solid fa-video text-cyan-600"></i>
+                                    <span>Xem trước kịch bản phân đoạn (60s):</span>
+                                </span>
+                                <button onclick="copyToClipboard('v-result-output', this)" class="text-xs bg-white hover:bg-cyan-100 text-cyan-800 px-2.5 py-1 rounded-lg border border-cyan-200 transition flex items-center space-x-1 shadow-sm">
+                                    <i class="fa-regular fa-copy"></i>
+                                    <span>Copy Kịch Bản</span>
+                                </button>
+                            </div>
+                            <div id="v-result-output" class="text-xs text-slate-700 whitespace-pre-wrap leading-relaxed overflow-y-auto max-h-60 p-3 bg-white rounded-lg border border-cyan-100 shadow-xs">
+                                [Kịch bản 3 phân đoạn: Chào hỏi (10s) - 3 Điểm cốt lõi (40s) - Lời dặn & Tái khám (10s) sẽ hiển thị ở đây...]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 3: HƯỚNG DẪN & BẢO MẬT (90 PHÚT) ================= -->
+        <div id="tab-training" class="tab-content space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Cột trái: Nguyên tắc bảo mật -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl border border-amber-200 p-5 sm:p-6 shadow-sm">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center text-lg shadow-sm">
+                                <i class="fa-solid fa-shield-cat"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-amber-900 text-base">Nguyên Tắc Ẩn Danh & Bảo Mật</h3>
+                                <p class="text-xs text-amber-700">An toàn pháp lý y tế tuyệt đối</p>
+                            </div>
+                        </div>
+                        <ul class="space-y-3 text-xs text-amber-900 leading-relaxed">
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-circle-xmark text-rose-600 mt-0.5"></i>
+                                <span><strong>Tuyệt đối không đưa:</strong> Tên thật bệnh nhân, số hồ sơ bệnh án (PID), số điện thoại, ngày tháng năm sinh hoặc địa chỉ cụ thể lên các ứng dụng AI công cộng.</span>
+                            </li>
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-circle-check text-emerald-600 mt-0.5"></i>
+                                <span><strong>Chỉ đưa tình trạng chung:</strong> Ví dụ: "Nam giới 65 tuổi vừa mổ u xơ tiền liệt tuyến về nhà" hoặc "Nữ 45 tuổi mang ống thông JJ".</span>
+                            </li>
+                            <li class="flex items-start space-x-2">
+                                <i class="fa-solid fa-circle-check text-emerald-600 mt-0.5"></i>
+                                <span><strong>Kiểm duyệt y khoa:</strong> Điều dưỡng là người chịu trách nhiệm kiểm tra lại nội dung do AI sinh ra trước khi in ấn hoặc gửi cho người bệnh.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Lợi ích thiết thực -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+                        <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wider mb-3 flex items-center space-x-2">
+                            <i class="fa-solid fa-award text-medical-600"></i>
+                            <span>Vì sao đề tài này rất "Đáng tiền"?</span>
+                        </h3>
+                        <div class="space-y-3 text-xs text-slate-600">
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                                <strong class="text-slate-800 block mb-1">1. Đúng vai trò Health Educator</strong>
+                                <p>Đẩy mạnh chức năng giáo dục sức khỏe vốn quan trọng nhưng thường bị bỏ ngỏ vì điều dưỡng quá bận rộn.</p>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100">
+                                <strong class="text-slate-800 block mb-1">2. Tiết kiệm 95% thời gian</strong>
+                                <p>Không cần ngồi gõ máy hay thiết kế vất vả. Có ngay sản phẩm trực quan chỉ sau 1-2 phút.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cột phải: Kịch bản sinh hoạt khoa 90 phút -->
+                <div class="lg:col-span-7">
+                    <div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-5">
+                        <div class="border-b border-slate-100 pb-3 flex justify-between items-center">
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base">Cấu Trúc Đào Tạo Khoa 90 Phút</h3>
+                                <p class="text-xs text-slate-500">Kịch bản thực hành "Cầm tay chỉ việc" cho toàn thể điều dưỡng</p>
+                            </div>
+                            <span class="bg-medical-100 text-medical-800 font-bold text-xs px-3 py-1 rounded-full">90 Phút</span>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Phần 1 -->
+                            <div class="flex space-x-3 p-3.5 rounded-xl bg-slate-50 border border-slate-100">
+                                <div class="w-8 h-8 rounded-lg bg-medical-600 text-white font-bold flex items-center justify-center shrink-0 text-xs">P1</div>
+                                <div>
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="font-bold text-slate-900 text-xs sm:text-sm">Đặt vấn đề & Khơi gợi thực tế</h4>
+                                        <span class="text-xs font-semibold text-medical-700 bg-medical-50 px-2 py-0.5 rounded">15 phút</span>
+                                    </div>
+                                    <p class="text-xs text-slate-600 mt-1">Thảo luận về khó khăn khi dặn dò bệnh nhân tiết niệu (nói miệng hay quên, tờ rơi sẵn có quá nhiều từ chuyên môn người bệnh lớn tuổi không hiểu).</p>
+                                </div>
+                            </div>
+
+                            <!-- Phần 2 -->
+                            <div class="flex space-x-3 p-3.5 rounded-xl bg-medical-50/50 border border-medical-100">
+                                <div class="w-8 h-8 rounded-lg bg-medical-600 text-white font-bold flex items-center justify-center shrink-0 text-xs">P2</div>
+                                <div>
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="font-bold text-slate-900 text-xs sm:text-sm">Thực hành Prompt Tờ rơi cá nhân hóa</h4>
+                                        <span class="text-xs font-semibold text-medical-700 bg-white px-2 py-0.5 rounded shadow-xs">35 phút</span>
+                                    </div>
+                                    <p class="text-xs text-slate-600 mt-1">Cung cấp cấu trúc câu lệnh chuẩn. Điều dưỡng thực hành trực tiếp trên điện thoại cá nhân (ChatGPT/Gemini) và nhận tờ rơi dặn dò chỉ sau 30 giây.</p>
+                                </div>
+                            </div>
+
+                            <!-- Phần 3 -->
+                            <div class="flex space-x-3 p-3.5 rounded-xl bg-cyan-50/50 border border-cyan-100">
+                                <div class="w-8 h-8 rounded-lg bg-cyan-600 text-white font-bold flex items-center justify-center shrink-0 text-xs">P3</div>
+                                <div>
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="font-bold text-slate-900 text-xs sm:text-sm">Tạo Kịch bản Video 60 giây / Voice-over Zalo</h4>
+                                        <span class="text-xs font-semibold text-cyan-700 bg-white px-2 py-0.5 rounded shadow-xs">25 phút</span>
+                                    </div>
+                                    <p class="text-xs text-slate-600 mt-1">Hướng dẫn điều dưỡng dùng AI tạo kịch bản 3 phân đoạn để quay video ngắn hoặc ghi âm gửi qua Zalo cho người nhà bệnh nhân trước xuất viện.</p>
+                                </div>
+                            </div>
+
+                            <!-- Phần 4 -->
+                            <div class="flex space-x-3 p-3.5 rounded-xl bg-slate-50 border border-slate-100">
+                                <div class="w-8 h-8 rounded-lg bg-slate-700 text-white font-bold flex items-center justify-center shrink-0 text-xs">P4</div>
+                                <div>
+                                    <div class="flex items-center justify-between">
+                                        <h4 class="font-bold text-slate-900 text-xs sm:text-sm">Thảo luận, Trình bày sản phẩm & Đánh giá</h4>
+                                        <span class="text-xs font-semibold text-slate-700 bg-slate-200 px-2 py-0.5 rounded">15 phút</span>
+                                    </div>
+                                    <p class="text-xs text-slate-600 mt-1">Cả khoa cùng xem các sản phẩm vừa tạo, đánh giá tính tiện lợi, chia sẻ kinh nghiệm ứng dụng thực tế ngay tại buồng bệnh.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-auto py-4 text-center text-xs text-slate-500">
+        <p>Ứng dụng hỗ trợ Giáo dục sức khỏe Khoa Ngoại Tiết Niệu | Thiết kế tối ưu cho Điều dưỡng viên thời đại số.</p>
+    </footer>
+
+    <!-- Notification Toast / Custom Alert Box (No native alert) -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 border border-slate-700 text-xs">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-base"></i>
+        <span id="toast-msg">Đã sao chép thành công!</span>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Switch Tabs Function
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-white', 'text-medical-800', 'shadow-md');
+                el.classList.add('text-cyan-100', 'hover:bg-white/10');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            
+            const btnMap = {
+                'tab-brochure': 'btn-tab-brochure',
+                'tab-video': 'btn-tab-video',
+                'tab-training': 'btn-tab-training'
+            };
+            
+            const activeBtn = document.getElementById(btnMap[tabId]);
+            activeBtn.classList.remove('text-cyan-100', 'hover:bg-white/10');
+            activeBtn.classList.add('bg-white', 'text-medical-800', 'shadow-md');
+        }
+
+        // Copy to clipboard helper
+        function copyToClipboard(elementId, btnElement) {
+            const text = document.getElementById(elementId).innerText;
+            
+            // Using modern fallback or standard copy
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToast("Đã sao chép nội dung vào bộ nhớ tạm!");
+            } catch (err) {
+                showToast("Không thể sao chép, vui lòng thử lại!");
+            }
+            document.body.removeChild(textArea);
+        }
+
+        // Show custom toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+
+        // Generate Brochure Prompt & Sample
+        function generateBrochurePrompt() {
+            const disease = document.getElementById('b-disease').value;
+            const age = document.getElementById('b-age').value;
+            const gender = document.getElementById('b-gender').value;
+            const detail = document.getElementById('b-detail').value || "Không có ghi chú thêm";
+            const format = document.getElementById('b-format').value;
+
+            const prompt = `Hãy đóng vai là một Điều dưỡng trưởng Khoa Ngoại Tiết Niệu giàu kinh nghiệm, hãy soạn thảo một tài liệu giáo dục sức khỏe ngắn gọn theo định dạng: "${format}" cho bệnh nhân ${gender}, ${age} với tình trạng cụ thể: "${disease}. Lưu ý: ${detail}".
+
+Yêu cầu cụ thể về văn phong:
+1. Sử dụng ngôn ngữ bình dân, từ ngữ mộc mạc, dễ hiểu cho người lớn tuổi, tránh dùng quá nhiều từ thuật ngữ y khoa khô khan.
+2. Trình bày rõ ràng thành các mục đánh số (1, 2, 3, 4) với các tiêu đề in đậm.
+3. Nội dung bao gồm: Hướng dẫn chăm sóc tại nhà, dấu hiệu bất thường cần báo bác sĩ/điều dưỡng ngay, và số điện thoại liên hệ cấp cứu của khoa.
+4. Đảm bảo tính chính xác y khoa tuyệt đối.`;
+
+            document.getElementById('b-prompt-output').innerText = prompt;
+
+            // Generate mock preview result
+            const sampleResult = `THƯ HƯỚNG DẪN CHĂM SÓC Y TẾ TẠI NHÀ
+(Dành cho bệnh nhân ${gender}, ${age} - ${disease})
+
+Kính gửi cô chú/anh chị, để vết thương hồi phục nhanh và an tâm khi về nhà, khoa Ngoại Tiết Niệu dặn dò các điểm cốt lõi sau:
+
+1. Cách giữ gìn và vệ sinh tại nhà:
+- Giữ vùng quanh ống thông / vết mổ luôn khô ráo, sạch sẽ bằng gạc vô khuẩn theo lịch dặn.
+- Không tự ý xoay, kéo hoặc bẻ góc ống thông dưới bất kỳ hình thức nào.
+
+2. Chế độ ăn uống & uống nước:
+- Uống đủ từ 2 đến 2.5 lít nước mỗi ngày (trừ khi bác sĩ có chỉ định hạn chế nước) để nước tiểu trong, không lắng cặn sỏi.
+- Ăn nhiều rau xanh, trái cây tươi, hạn chế thực phẩm quá mặn hoặc nhiều dầu mỡ.
+
+3. Dấu hiệu bất thường cần đến bệnh viện NGAY:
+- Nước tiểu đỏ sẫm như nước xá xị hoặc có cục máu đông lớn gây bí tiểu.
+- Sốt cao trên 38.5 độ C, đau tức vùng hông lưng hoặc hạ vị dữ dội uống thuốc giảm đau không đỡ.
+- Ống thông bị tuột, rò rỉ nước tiểu liên tục quanh chân ống.
+
+4. Thông tin liên hệ trực trực tiếp:
+- Khi cần hỗ trợ gấp 24/7, xin vui lòng gọi ngay số Điện thoại Trực Buồng Bệnh / Trực Điều Dưỡng Khoa Ngoại Tiết Niệu. Chúc cô chú mau hồi phục sức khỏe!`;
+
+            document.getElementById('b-result-output').innerText = sampleResult;
+            showToast("Đã tạo prompt và kết quả mẫu thành công!");
+        }
+
+        // Generate Video Prompt & Sample
+        function generateVideoPrompt() {
+            const topic = document.getElementById('v-topic').value;
+            const style = document.getElementById('v-style').value;
+            const audience = document.getElementById('v-audience').value;
+            const note = document.getElementById('v-note').value;
+
+            const prompt = `Hãy đóng vai Điều dưỡng viên Khoa Ngoại Tiết Niệu, soạn thảo một kịch bản Video ngắn đúng 60 giây (hoặc bản Voice-over gửi qua Zalo) với chủ đề: "${topic}". 
+
+Thông tin cấu hình:
+- Phong cách diễn đạt: ${style}
+- Đối tượng nghe: ${audience}
+- Lưu ý trọng tâm cần nhấn mạnh: ${note}
+
+Yêu cầu cấu trúc kịch bản chia rõ 3 phân đoạn thời gian:
+- Phân đoạn 1 (0-10s): Chào hỏi ấm áp và giới thiệu ngắn gọn vấn đề.
+- Phân đoạn 2 (10-50s): 3 điểm lưu ý cốt lõi nhất khi chăm sóc tại nhà với lời dặn dễ nhớ.
+- Phân đoạn 3 (50-60s): Lời dặn dò ân cần, chúc mau khỏe và hẹn tái khám.`;
+
+            document.getElementById('v-prompt-output').innerText = prompt;
+
+            // Generate mock video script result
+            const sampleVideo = `KỊCH BẢN VIDEO TƯ VẤN 60 GIÂY: ${topic.toUpperCase()}
+Phong cách: ${style} | Đối tượng: ${audience}
+
+[PHÂN ĐOẠN 1: CHÀO HỎI & ĐẶT VẤN ĐỀ - 0 đến 10 giây]
+- Hình ảnh/Động tác: Điều dưỡng mặc áo blouse cười tươi, nhìn thẳng ống kính điện thoại.
+- Lời thoại: "Dạ, xin chào cô chú và gia đình! Em là điều dưỡng khoa Ngoại Tiết Niệu. Hôm nay em làm clip ngắn này để dặn dò cô chú các điểm quan trọng nhất khi mình về nhà an toàn nhé ạ."
+
+[PHÂN ĐOẠN 2: 3 ĐIỂM CỐT LÕI - 10 đến 50 giây]
+- Hình ảnh/Động tác: Giơ tay minh họa hoặc chiếu cận cảnh túi nước tiểu / ống thông.
+- Lời thoại: 
+"Thứ nhất, về lượng nước: Cô chú nhớ uống đủ 2 lít nước mỗi ngày giúp em để nước tiểu luôn trong, không bị cặn sỏi nha.
+Thứ hai, tuyệt đối không kéo giật mạnh ống thông hoặc tự ý xoay trở khi chưa có hướng dẫn.
+Thứ ba, nếu thấy đau tức nhiều hoặc nước tiểu bỗng nhiên đỏ sẫm như máu cá, đừng hoảng hốt mà hãy gọi liền cho khoa mình nhé."
+
+[PHÂN ĐOẠN 3: LỜI DĂN DÒ & HẸN TÁI KHÁM - 50 đến 60 giây]
+- Hình ảnh/Động tác: Cúi đầu chào nhẹ nhàng, vẫy tay thân thiện.
+- Lời thoại: "Mọi thắc mắc gia đình cứ nhắn qua số Zalo này cho em nha. Chúc cô chú mau lại sức và hẹn gặp lại ở lịch tái khám sắp tới. Em chào gia đình ạ!"`;
+
+            document.getElementById('v-result-output').innerText = sampleVideo;
+            showToast("Đã tạo prompt kịch bản video thành công!");
+        }
+
+        // Run default generation on load for instant preview
+        window.onload = function() {
+            generateBrochurePrompt();
+            generateVideoPrompt();
+        };
+    </script>
+</body>
+</html>
